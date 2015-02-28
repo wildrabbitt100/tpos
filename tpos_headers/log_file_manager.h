@@ -156,6 +156,11 @@ class Rabbit_Log {
 		log.write("\n\n", 2);
 	 }
 	 
+	 void close_log(void)
+	 {
+		log.close();		
+	 }
+	 
      private:
 	 
 	 

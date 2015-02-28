@@ -20,7 +20,7 @@
 
 
 
-int find_numbers( DisplayClass& display, ofstream& log, ConfigManagerClass& config )
+int find_numbers( DisplayClass& display, Rabbit_Log& log, ConfigManagerClass& config )
 {
 
 

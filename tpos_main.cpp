@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
    DisplayClass display_class = DisplayClass();
    int log_open = 0;  
    ALLEGRO_CONFIG *cfg = NULL;
-   ConfigManagerClass config_manager;
+   ConfigManagerClass config_manager = ConfigManagerClass();
    ALLEGRO_EVENT_QUEUE *queue = NULL;
    ALLEGRO_EVENT event;
    Rabbit_Log log = Rabbit_Log(0);
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
    if(init_class.init_okay == 0)
    {
 	   /* Either the call to al_install_system() or al_init_ttf_addon() failed. */
-	   log.close();
+	   log.close_log();
 	   wait_for_keypress();
        return 1;
    }
@@ -67,50 +67,59 @@ int main(int argc, char *argv[])
    
    /* The allegro system is installed, true_type_font_addon installed... */
    
+   /**********************************************************************/
+   /***************** Section : set up Display ***************************/
+   /**********************************************************************/
+   
+   
    log.write_message_number();
-   log.write("Initialising Display. ");
+   log.write_string("Initialising Display. ");
    log.end_message();
 
-   
    display_class = DisplayClass(0, log);
-   
    
    /* Message for whether or not initialising the display class went okay. */
    
    log.write_message_number();
    if(display_class.init_okay != 1)
    {
-      log.write_message("Couldn't create the display. Aborting.\n");
+      log.write_string("Couldn't create the display. Aborting.\n");
 	  log.end_message();
-	  log.close();
+	  log.close_log();
 	  wait_for_keypress();
 	  return 0;
    }
    else
    {
-	  log.write_message("Successfully created the Display.\n");
+	  log.write_string("Successfully created the Display.\n");
 	  log.end_message();
    }
   
-   
-   
    display_class.clear();
    
+   /***************** End of Section ********************************************/
+   
+   /**********************************************************************/
+   /**************** Section : load configuration file. ******************/
+   /**********************************************************************/
+   
    i = config_manager.load_config_file("configuration/tpos_configuration_file.cfg");
+   
+   log.write_message_number();
    
    if( i == 1 ) /* Loading failed. */
    {
       if(log_open)
 	  {
-	     log.write("Unable to load configuration file.\n", 38);
-		 log.close();
+	     log.write_string("Unable to load configuration file.\n");
+		 log.close_log();
 	  }
 	  
 	  return 1;
    }
    else
    {
-      log.write("Loaded the configuration file.\n", 32); 
+      log.write_string("Loaded the configuration file.\n"); 
 	  #ifdef USE_CONSOLE
       tpos_print("Loaded the configuration file.\n");
 	  #endif
@@ -120,7 +129,7 @@ int main(int argc, char *argv[])
    queue = al_create_event_queue();
    if(queue == NULL)
    {
-      log.write("Failed to create the event queue in main. Aborting.\n", 43);
+      log.write_string("Failed to create the event queue in main. Aborting.\n");
 	  return 0;
    }
    
@@ -133,9 +142,9 @@ int main(int argc, char *argv[])
 
    while(quit == 0)
    {
-      //cout << "in loop.\n";
+      
       al_wait_for_event(queue, &event);
-	  //cout << "got event\n";
+	 
 	  
 	  
 	  switch(event.type)

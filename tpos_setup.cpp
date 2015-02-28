@@ -1,4 +1,9 @@
-#include "tpos_headers/initialisation.h"
+
+#include "tpos_headers/tpos_main_header.h"
+
+#include "tpos_headers/log_file_manager.h"          /* tpos_main_header.h */
+
+#include "tpos_headers/initialisation.h"            /* log_file_manager.h, tpos_main_header.h */
 
 
 

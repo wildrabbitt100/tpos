@@ -109,15 +109,17 @@ class DisplayClass
    
    }
    
-   DisplayClass(int dummy, ofstream &log) : buffer(NULL) 
+   DisplayClass(int dummy, Rabbit_Log &log) : buffer(NULL) 
    {
        al_set_new_display_flags(ALLEGRO_WINDOWED);
 	   
        al_set_new_display_option(ALLEGRO_VSYNC, 1, ALLEGRO_REQUIRE);
    
        display = NULL;
-   
-       cout << "Initialising Display Class.";
+	   
+       #ifdef USE_CONSOLE
+       tpos_print("Initialising Display Class.\n");
+       #endif
    
        if( (display = al_create_display(1024, 768)) == NULL )
        {
@@ -135,7 +137,7 @@ class DisplayClass
 	   font = al_load_ttf_font("SIRCLIVE.ttf", 16, 0);
 	   if(font == NULL)
 	   {
-	      log.write("Unable to load font SIRCLIVE.ttf\n", 34);
+	      log.write_string("Unable to load font SIRCLIVE.ttf\n");
 		  font_loaded = 0;
 	   }
 	   else
@@ -203,23 +205,17 @@ class ConfigManagerClass
    
    int load_config_file(const char *filename)
    {
-      if(cfg != NULL)
-	  {
-	     return 2;
-	  }
-	  else
-	  {
-         cfg = al_load_config_file(filename);
+      cfg = al_load_config_file(filename);
 		 
-		 if( cfg == NULL )
-		 {
-		    return 1;
-		 }
-         else 
-		 {
-		    return 0;
-		 }
-      }
+	  if( cfg == NULL )
+	  {
+		 return 1;
+	  }
+      else 
+	  {
+		 return 0;
+	  }
+     
    }
    
    unsigned int get_integer(const char *key, int *return_state)
@@ -239,8 +235,4 @@ class ConfigManagerClass
 	  }
       
    }
-   
-   
-
-
 };

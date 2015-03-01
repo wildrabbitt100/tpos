@@ -20,8 +20,8 @@ ALLEGRO_LIB = -lallegro.dll -lallegro_ttf.dll -lallegro_font.dll
 
 LINKER_FLAGS = -static-libgcc -static-libstdc++ $(ALLEGRO_LIB) 
 
-USE_CONSOLE_STRING = -mwindows
-#USE_CONSOLE_STRING = 
+#USE_CONSOLE_STRING = -mwindows
+USE_CONSOLE_STRING = 
 
 CPP_FLAGS = -Wall
 
@@ -36,22 +36,25 @@ tpos_001.exe : $(OBJECT_FILES) Makefile
 tpos_main.o :	tpos_main.cpp                      \
 				tpos_headers/find_numbers.h        \
 				tpos_headers/initialisation.h      \
-				tpos_headers/tpos_main_header.h                            
+				tpos_headers/tpos_main_header.h    \
+                tpos_headers/log_file_manager.h				
 				g++ -c tpos_main.cpp -o $@
 
 
 			 
 
 			 
-tpos_setup.o : tpos_setup.cpp                     \
-               tpos_headers/initialisation.h      \
-			   tpos_headers/tpos_main_header.h    \                        
-			   g++ -c tpos_setup.cpp -o $@
+tpos_setup.o :  tpos_setup.cpp                     \
+				tpos_headers/initialisation.h      \
+				tpos_headers/tpos_main_header.h    \
+				tpos_headers/log_file_manager.h
+					g++ -c tpos_setup.cpp -o $@
 				
 
 tpos_find_numbers.o :  tpos_find_numbers.cpp                \
 						tpos_headers/find_numbers.h         \
 						tpos_headers/initialisation.h                \
-						tpos_headers/tpos_main_header.h                            
+						tpos_headers/tpos_main_header.h               \
+						tpos_headers/log_file_manager.h
 						g++ -c tpos_find_numbers.cpp -o $@
 	

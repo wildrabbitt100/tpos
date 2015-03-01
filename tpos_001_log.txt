@@ -1,0 +1,8 @@
+MESSAGE :    0   :   Log file opened
+MESSAGE :    1   :   Installed Allegro System.
+MESSAGE :    2   :   Installed true type font addon.
+MESSAGE :    3   :   Finished initialising InitialisationClass.
+MESSAGE :    4   :   Initialising Display. 
+MESSAGE :    5   :   Successfully initialised the Display.
+MESSAGE :    6   :   Loaded the configuration file.
+MESSAGE :    7   :   In find_numbers().

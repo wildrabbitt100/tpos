@@ -1,4 +1,6 @@
-//#define USE_CONSOLE 
+/* tpos */
+
+#define USE_CONSOLE 
 
 
 #define tpos_print(MESSAGE) ( cout << MESSAGE )

@@ -1,3 +1,5 @@
+/* tpos */
+
 #include <allegro5/allegro5.h>
 #include <vector>
 #include <fstream>
@@ -28,6 +30,9 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+   
+   Rabbit_Log log = Rabbit_Log(0);
+   
    InitialisationClass init_class = InitialisationClass();
    DisplayClass display_class = DisplayClass();
    int log_open = 0;  
@@ -35,7 +40,7 @@ int main(int argc, char *argv[])
    ConfigManagerClass config_manager = ConfigManagerClass();
    ALLEGRO_EVENT_QUEUE *queue = NULL;
    ALLEGRO_EVENT event;
-   Rabbit_Log log = Rabbit_Log(0);
+   
    int quit = 0;
    int i = 0;
    int job_done = 0;
@@ -52,7 +57,9 @@ int main(int argc, char *argv[])
    }
    #endif
    
-   
+   #ifdef USE_CONSOLE
+      tpos_print("Calling constructor for init_class : init_class = InitialisationClass(log);\n");
+   #endif
    
    init_class = InitialisationClass(log);
    if(init_class.init_okay == 0)
@@ -91,13 +98,13 @@ int main(int argc, char *argv[])
    }
    else
    {
-	  log.write_string("Successfully created the Display.\n");
+	  log.write_string("Successfully initialised the Display.");
 	  log.end_message();
    }
   
    display_class.clear();
    
-   /***************** End of Section ********************************************/
+   /***************** End of Section *************************************/
    
    /**********************************************************************/
    /**************** Section : load configuration file. ******************/
@@ -111,7 +118,7 @@ int main(int argc, char *argv[])
    {
       if(log_open)
 	  {
-	     log.write_string("Unable to load configuration file.\n");
+	     log.write_string("Unable to load configuration file.");
 		 log.close_log();
 	  }
 	  
@@ -119,11 +126,14 @@ int main(int argc, char *argv[])
    }
    else
    {
-      log.write_string("Loaded the configuration file.\n"); 
+      log.write_string("Loaded the configuration file."); 
 	  #ifdef USE_CONSOLE
       tpos_print("Loaded the configuration file.\n");
 	  #endif
+	  log.end_message();
    }
+   
+   
    
    
    queue = al_create_event_queue();
@@ -153,6 +163,7 @@ int main(int argc, char *argv[])
 		     quit = 1;
 			 break;
 		 case ALLEGRO_EVENT_KEY_DOWN:
+		     quit = 1;
 		     break;
 	  }
 	  

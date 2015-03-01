@@ -1,3 +1,5 @@
+/* tpos */
+
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_ttf.h>
 #include <fstream>
@@ -42,12 +44,20 @@ class InitialisationClass
          }
 		 else
 		 {
-		    log.write_string("Installed Allegro System.\n");
+			cout << "Installed System.\n";
+		    log.write_string("Installed Allegro System."); /* 25 characters in string. */
+		    cout << "here 3.";	
 			log.end_message();
-			return;
+			
 		 }
+		 
+		 cout << "here 4.";
    
+         
+		 
          al_init_font_addon();
+		 
+		 cout << "here 5.";
 		 
 		 /* Message for call to al_init_ttf_addon(). */
 		 log.write_message_number();
@@ -58,6 +68,11 @@ class InitialisationClass
 			log.end_message();
 			return;
 	     }
+		 else
+		 {
+			log.write_string("Installed true type font addon.");
+			log.end_message();
+		 } 
 		 
 		 
 		 al_install_keyboard();
@@ -66,6 +81,8 @@ class InitialisationClass
 		 log.write_message_number();
 		 log.write_string("Finished initialising InitialisationClass.");
 		 log.end_message();
+		 
+		 //cout << "here 1000";
 		 
 		 init_okay = GREEN_FLAG;
       }
@@ -118,7 +135,7 @@ class DisplayClass
        display = NULL;
 	   
        #ifdef USE_CONSOLE
-       tpos_print("Initialising Display Class.\n");
+       tpos_print("Initialising Display Class.");
        #endif
    
        if( (display = al_create_display(1024, 768)) == NULL )
@@ -137,7 +154,7 @@ class DisplayClass
 	   font = al_load_ttf_font("SIRCLIVE.ttf", 16, 0);
 	   if(font == NULL)
 	   {
-	      log.write_string("Unable to load font SIRCLIVE.ttf\n");
+	      log.write_string("Unable to load font SIRCLIVE.ttf .");
 		  font_loaded = 0;
 	   }
 	   else

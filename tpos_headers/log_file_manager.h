@@ -1,4 +1,4 @@
-
+/* tpos */
 
 #include <iostream>
 #include <fstream>
@@ -13,19 +13,6 @@ using namespace std;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 class Rabbit_Log {
 
     public:
@@ -34,45 +21,63 @@ class Rabbit_Log {
       Rabbit_Log(const Rabbit_Log&);
 	  Rabbit_Log& operator=(const Rabbit_Log&);
    
-  
-
       ofstream log;
       int init_okay_flag;
       int message_number;
    
    
-      /* Default constructor. */
+      /* Rabbit_Log : Default constructor. */
    
       Rabbit_Log() : init_okay_flag(RED_FLAG) { }
-   
+      
+	  /* Rabbit_Log : main constructor. */
      
-     Rabbit_Log(int dummy) : init_okay_flag(GREEN_FLAG) 
-	 { 
-	 
-	    log.open("tpos_001_log.txt", ios_base::out);
-		if(log.fail())
-		{
-		   init_okay_flag = RED_FLAG;
-		   return;
-		}
+      Rabbit_Log(int dummy) : init_okay_flag(GREEN_FLAG) 
+	  { 
+	     /* set message_number to 0 ready for the first message which will
+		    be message number 0. */
+	     
+		 message_number = 0;
+		 
+	     log.open("tpos_001_log.txt", ios_base::out);
+		 if(log.fail())
+		 {
+		    #ifdef USE_CONSOLE
+		       tpos_print("log.fail() return true. Couldn't open file.\n");
+		    #endif
+		    init_okay_flag = RED_FLAG;
+		    return;
+		 }
 		
+		 init_okay_flag = GREEN_FLAG;
+		 
+		 write_message_number();
 		
-		write_message_number();
-		if( write_string(" log file opened") != 0)
-		{
-		   init_okay_flag = RED_FLAG;
-		   return;
-		}
+		 
+		 
+		 if( write_string("Log file opened") != 0)
+		 {
+		    init_okay_flag = RED_FLAG;
+		    return;
+		 }
+		 
+		 end_message();
 		
-		init_okay_flag = GREEN_FLAG;
+		 
 	   
 	 }
 	 
+	 
+	 /* init_okay() : returns the flag which indicates whether or not any constructor called
+	                  failed to finish correctly. */
 	 
 	 int init_okay(void)
 	 {
 	    return init_okay_flag;
 	 }
+	 
+	 
+	 /* write_message_number() : */
 	 
 	 void write_message_number()
 	 {
@@ -82,50 +87,30 @@ class Rabbit_Log {
 		int power_of_ten = 10;
 		int next_digit = 0;
 		
-		if(init_okay_flag == RED_FLAG)
+	
+		if(init_okay_flag == RED_FLAG || message_number > 9999)
 		{
 		   return;		
 		}
 		
+		#ifdef USE_CONSOLE
+		    tpos_print("   In write_message_number.\n");
+		#endif
 		
 		for(i = 0; i < 20; ++i)
 		{
 	       string[i] = 0;	
 		}
 		
-		i = 0;
+		sprintf(string, "%4d", message_number);
+		 
+		
+		log.write("MESSAGE : ", 10);
+		log.write(string, 4);
+		log.write("   : ", 7);
 		
 		
-		while( (message_number % power_of_ten) != message_number )
-		{
-		   ++num_digits;
-		   power_of_ten *= 10;
-		   
-           if(num_digits > 7)
-           {
-              /* need error message */
-           }		   
-		} 
-
-        /* e.g  452 :    452 % 10    =   2 != 452 		
-		                 452 % 100   =  52 != 452
-						 452 % 1000  = 452 
-						 
-		*/
-		
-		
-		while( (power_of_ten /= 10) != 0 )
-		{
-		   next_digit = message_number / power_of_ten;
-		   string[i] = next_digit;
-		   ++i;
-		}
-		   
-		string[i] = '\0';
-		
-		log.write("MESSAGE ", 8);
-	    log.write(string, i);
-		log.write("   :   ", 7);
+		++message_number;
 	 }
 	 
 	 
@@ -135,23 +120,28 @@ class Rabbit_Log {
 	 {
 	     int length_of_string = strlen(string);
 		 
-		 if(init_okay_flag == RED_FLAG)
+		 if(string == NULL || init_okay_flag == RED_FLAG)
 		 {
 			 return 1;
 		 }
+		
 		 log.write(string, length_of_string);
-	     if(log.failbit || log.badbit)
+		 
+	     if(log.bad())
 		 {
+			#ifdef USE_CONSOLE
+			tpos_print("log.badbit set to 1.\n");
+			#endif
 		    return 2;
 		 }
-		 
+		
 		 return 0;
 	 }
 	 
 	 
 	 void end_message()
 	 {
-		log.write("\n\n", 2);
+		log.write("\n", 1);
 	 }
 	 
 	 void close_log(void)
